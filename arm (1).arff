@@ -1,0 +1,18 @@
+@relation association_rule
+@attribute I1{yes,?}
+@attribute I2{yes,?}
+@attribute I3{yes,?}
+@attribute I4{yes,?}
+@attribute I5{yes,?}
+@attribute class{t1,t2,t3,t4,t5,t6,t7,t8,t9}
+
+@data
+yes,yes,?,?,yes,t1
+?,yes,?,yes,?,t2
+?,yes,yes,?,?,t3
+yes,yes,?,yes,?,t4
+yes,?,yes,?,?,t5
+?,yes,yes,?,?,t6
+yes,?,yes,?,?,t7
+yes,yes,yes,?,yes,t8
+yes,yes,yes,?,?,t9

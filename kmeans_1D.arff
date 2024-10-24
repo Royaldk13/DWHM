@@ -1,0 +1,13 @@
+@relation kmeans_1D
+@attribute quantity numeric
+
+@data
+2
+4
+10
+12
+3
+20
+30
+11
+25
