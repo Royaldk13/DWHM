@@ -1,18 +1,14 @@
-@relation association_rule
-@attribute I1{yes,?}
-@attribute I2{yes,?}
-@attribute I3{yes,?}
-@attribute I4{yes,?}
-@attribute I5{yes,?}
-@attribute class{t1,t2,t3,t4,t5,t6,t7,t8,t9}
+@relation transactions
+
+@attribute T1 {M, O, N, K, E, Y}
+@attribute T2 {D, O, N, K, E, Y}
+@attribute T3 {M, A, K, E}
+@attribute T4 {M, U, C, K, Y}
+@attribute T5 {C, O, O, K, E}
 
 @data
-yes,yes,?,?,yes,t1
-?,yes,?,yes,?,t2
-?,yes,yes,?,?,t3
-yes,yes,?,yes,?,t4
-yes,?,yes,?,?,t5
-?,yes,yes,?,?,t6
-yes,?,yes,?,?,t7
-yes,yes,yes,?,yes,t8
-yes,yes,yes,?,?,t9
+{0 M, 1 O, 2 N, 3 K, 4 E, 5 Y}
+{0 D, 1 O, 2 N, 3 K, 4 E, 5 Y}
+{0 M, 1 A, 2 K, 3 E}
+{0 M, 1 U, 2 C, 3 K, 4 Y}
+{0 C, 1 O, 2 O, 3 K, 4 E}

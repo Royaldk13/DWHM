@@ -1,93 +1,91 @@
 def naive_bayes_classifier():
-    
-    dataset = []
+    dataset = [
+        ['young', 'High', 'No', 'Fair', 'No'],
+        ['young', 'High', 'No', 'Good', 'No'],
+        ['Middle_aged', 'High', 'No', 'Fair', 'Yes'],
+        ['old', 'Medium', 'No', 'Fair', 'Yes'],
+        ['old', 'Low', 'Yes', 'Fair', 'Yes'],
+        ['old', 'Low', 'Yes', 'Good', 'No'],
+        ['Middle_aged', 'Low', 'Yes', 'Good', 'Yes'],
+        ['young', 'Medium', 'No', 'Fair', 'No'],
+        ['young', 'Low', 'Yes', 'Fair', 'Yes'],
+        ['old', 'Medium', 'Yes', 'Fair', 'Yes'],
+        ['young', 'Medium', 'Yes', 'Good', 'Yes'],
+        ['Middle_aged', 'Medium', 'No', 'Good', 'Yes'],
+        ['Middle_aged', 'High', 'Yes', 'Fair', 'Yes'],
+        ['old', 'Medium', 'No', 'Good', 'No']
+    ]
 
-    
-    n = int(input("Enter the number of records in the dataset: "))
+    # Total number of records
+    n = len(dataset)
 
-    
-    print("Enter the data in the format 'attr1 attr2 class' (attr1 and attr2 can be 0 or 1, class can be 'a' or 'b'):")
+    # Calculate the prior probabilities for 'Yes' and 'No'
+    count_yes = sum(1 for record in dataset if record[4] == 'Yes')
+    count_no = n - count_yes
 
-    for i in range(n):
-        a1, a2, cls = input(f"Enter data for record {i + 1}: ").split()
-        dataset.append([int(a1), int(a2), cls])
+    p_yes = count_yes / n
+    p_no = count_no / n
 
-    
-    count_a = sum(1 for record in dataset if record[2] == 'a')
-    count_b = n - count_a  
+    # Initialize counters for conditional probabilities
+    attr_counts = {
+        'age': {'Yes': {}, 'No': {}},
+        'income': {'Yes': {}, 'No': {}},
+        'student': {'Yes': {}, 'No': {}},
+        'credit_rating': {'Yes': {}, 'No': {}}
+    }
 
-    p_a = count_a / n
-    p_b = count_b / n
+    # Attributes values we are interested in
+    attributes = ['age', 'income', 'student', 'credit_rating']
+    values = {
+        'age': ['young', 'Middle_aged', 'old'],
+        'income': ['High', 'Medium', 'Low'],
+        'student': ['Yes', 'No'],
+        'credit_rating': ['Fair', 'Good']
+    }
 
-    attr1_count0a = attr1_count1a = attr1_count0b = attr1_count1b = 0
-    attr2_count0a = attr2_count1a = attr2_count0b = attr2_count1b = 0
+    # Initialize all counts
+    for attr in attributes:
+        for value in values[attr]:
+            attr_counts[attr]['Yes'][value] = 0
+            attr_counts[attr]['No'][value] = 0
 
-    
+    # Count occurrences of attribute values conditioned on 'Yes' or 'No'
     for record in dataset:
-        a1, a2, cls = record
-        if a1 == 0:
-            if cls == 'a':
-                attr1_count0a += 1
+        for i, attr in enumerate(attributes):
+            if record[4] == 'Yes':
+                attr_counts[attr]['Yes'][record[i]] += 1
             else:
-                attr1_count0b += 1
-        elif a1 == 1:
-            if cls == 'a':
-                attr1_count1a += 1
-            else:
-                attr1_count1b += 1
+                attr_counts[attr]['No'][record[i]] += 1
 
-        if a2 == 0:
-            if cls == 'a':
-                attr2_count0a += 1
-            else:
-                attr2_count0b += 1
-        elif a2 == 1:
-            if cls == 'a':
-                attr2_count1a += 1
-            else:
-                attr2_count1b += 1
+    # Ask the user for the input to classify
+    new_record = {
+        'age': 'young',
+        'income': 'Medium',
+        'student': 'Yes',
+        'credit_rating': 'Fair'
+    }
 
-    
-    attr1_p_zero_given_a = attr1_count0a / count_a if count_a != 0 else 0
-    attr1_p_one_given_a = attr1_count1a / count_a if count_a != 0 else 0
-    attr1_p_zero_given_b = attr1_count0b / count_b if count_b != 0 else 0
-    attr1_p_one_given_b = attr1_count1b / count_b if count_b != 0 else 0
+    # Calculate the likelihood probabilities
+    p_x_given_yes = 1
+    p_x_given_no = 1
+    for attr in attributes:
+        p_x_given_yes *= (attr_counts[attr]['Yes'][new_record[attr]] / count_yes) if count_yes != 0 else 0
+        p_x_given_no *= (attr_counts[attr]['No'][new_record[attr]] / count_no) if count_no != 0 else 0
 
-    attr2_p_zero_given_a = attr2_count0a / count_a if count_a != 0 else 0
-    attr2_p_one_given_a = attr2_count1a / count_a if count_a != 0 else 0
-    attr2_p_zero_given_b = attr2_count0b / count_b if count_b != 0 else 0
-    attr2_p_one_given_b = attr2_count1b / count_b if count_b != 0 else 0
+    # Multiply by the prior probabilities
+    p_yes_given_x = p_x_given_yes * p_yes
+    p_no_given_x = p_x_given_no * p_no
 
-    new_attr1 = int(input("Enter new attr1 for prediction (0 or 1): "))
-    new_attr2 = int(input("Enter new attr2 for prediction (0 or 1): "))
+    # Print the results
+    print(f"\nProbability of class 'Yes': {p_yes_given_x}")
+    print(f"Probability of class 'No': {p_no_given_x}")
 
-    
-    if new_attr1 == 0:
-        p_class_a = attr1_p_zero_given_a
-        p_class_b = attr1_p_zero_given_b
+    # Predict the class
+    if p_yes_given_x > p_no_given_x:
+        print("The predicted class is 'Yes' (Buys computer).")
     else:
-        p_class_a = attr1_p_one_given_a
-        p_class_b = attr1_p_one_given_b
+        print("The predicted class is 'No' (Does not buy computer).")
 
-    if new_attr2 == 0:
-        p_class_a *= attr2_p_zero_given_a
-        p_class_b *= attr2_p_zero_given_b
-    else:
-        p_class_a *= attr2_p_one_given_a
-        p_class_b *= attr2_p_one_given_b
-
-    p_class_a *= p_a
-    p_class_b *= p_b
-
-    
-    print(f"\nProbability of class 'a': {p_class_a}")
-    print(f"Probability of class 'b': {p_class_b}")
-
-    
-    if p_class_a > p_class_b:
-        print("The predicted class is 'a'.")
-    else:
-        print("The predicted class is 'b'.")
 
 if __name__ == '__main__':
     naive_bayes_classifier()

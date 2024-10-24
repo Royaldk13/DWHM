@@ -1,24 +1,23 @@
-@relation bayesclassification
+@relation BuysComputer
 
-@attribute age{youth,middle,senior}
-@attribute income{high,medium,low}
-@attribute student{yes, no}
-@attribute credit_rating{fair, excellent}
-@attribute class{yes,no}
-
+@attribute age {young,Middle_aged,old}
+@attribute income {High,Medium,Low}
+@attribute student {Yes,No}
+@attribute credit_rating {Fair,Good}
+@attribute buys_computer {Yes,No}
 
 @data
-youth,high,no,fair,no
-youth,high,no,excellent,no
-middle,high,no,fair,yes
-senior,medium,no,fair,yes
-senior,low,yes,fair,yes
-senior,low,yes,excellent,no
-middle,low,yes,excellent,yes
-youth,medium,no,fair,no
-youth,low,yes,fair,yes
-senior,medium,yes,fair,yes
-youth,medium,yes,excellent,yes
-middle,medium,no,excellent,yes
-middle,high,yes,fair,yes
-senior,medium,no,excellent,no
+young,High,No,Fair,No
+young,High,No,Good,No
+Middle_aged,High,No,Fair,Yes
+old,Medium,No,Fair,Yes
+old,Low,Yes,Fair,Yes
+old,Low,Yes,Good,No
+Middle_aged,Low,Yes,Good,Yes
+young,Medium,No,Fair,No
+young,Low,Yes,Fair,Yes
+old,Medium,Yes,Fair,Yes
+young,Medium,Yes,Good,Yes
+Middle_aged,Medium,No,Good,Yes
+Middle_aged,High,Yes,Fair,Yes
+old,Medium,No,Good,No
